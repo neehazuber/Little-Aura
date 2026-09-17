@@ -1,0 +1,13 @@
+node_modules/
+.env
+*.db
+.pytest_cache/
+__pycache__/
+
+# Python files (not part of Node.js app)
+app.py
+main.py
+*.py
+templates/
+tests/
+LITTLE AURA/

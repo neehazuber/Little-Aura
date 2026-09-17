@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClothBill — Premium Billing & Inventory Management</title>
+  
+  <!-- Bootstrap 5 CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- FontAwesome Icons CDN -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  
+  <!-- Custom Luxury Stylesheet -->
+  <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ==========================================
+       1. LOGIN OVERLAY DECK
+       ========================================== -->
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-card">
+      <div class="brand-label">LITTLE AURA</div>
+      <div class="brand-sub">ClothBill System</div>
+      <h5 class="mb-4 text-secondary text-uppercase fw-semibold" style="letter-spacing: 0.05em; font-size: 0.85rem;">Secure Login</h5>
+      
+      <form id="loginForm">
+        <div class="mb-3 text-start">
+          <label for="loginUsername" class="form-label text-muted small fw-semibold text-uppercase">Username</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-0"><i class="fa-solid fa-user text-muted"></i></span>
+            <input type="text" class="form-control bg-light border-0 py-2" id="loginUsername" placeholder="Enter username" required>
+          </div>
+        </div>
+        <div class="mb-4 text-start">
+          <label for="loginPassword" class="form-label text-muted small fw-semibold text-uppercase">Password</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light border-0"><i class="fa-solid fa-lock text-muted"></i></span>
+            <input type="password" class="form-control bg-light border-0 py-2" id="loginPassword" placeholder="Enter password" required>
+          </div>
+        </div>
+        <button type="submit" id="btnLoginSubmit" class="btn btn-gold w-100 py-2.5 mt-2 text-uppercase fw-bold">Sign In</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       2. MAIN WORKSPACE CONTAINER
+       ========================================== -->
+  <div class="app-container" id="mainContainer" style="display: none;">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        LITTLE AURA
+        <span>CLOTHBILL ENGINE</span>
+      </div>
+      
+      <ul class="nav-menu">
+        <li class="nav-item active" data-view="dashboardView">
+          <a href="#" id="nav-dashboard"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        </li>
+        <li class="nav-item" data-view="billingView">
+          <a href="#" id="nav-billing"><i class="fa-solid fa-calculator"></i> Billing POS</a>
+        </li>
+        <li class="nav-item" data-view="productsView">
+          <a href="#" id="nav-products"><i class="fa-solid fa-shirt"></i> Products</a>
+        </li>
+        <li class="nav-item" data-view="inventoryView">
+          <a href="#" id="nav-inventory"><i class="fa-solid fa-boxes-stacked"></i> Inventory</a>
+        </li>
+        <li class="nav-item" data-view="customersView">
+          <a href="#" id="nav-customers"><i class="fa-solid fa-users"></i> Customers</a>
+        </li>
+        <li class="nav-item" data-view="reportsView">
+          <a href="#" id="nav-reports"><i class="fa-solid fa-file-invoice-dollar"></i> Sales Reports</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-footer">
+        <div class="user-info-widget">
+          <div class="user-name" id="displayUserName">Cashier Staff</div>
+          <div class="user-role" id="displayUserRole">Staff</div>
+        </div>
+        <button class="btn-logout" id="btnLogout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out</button>
+      </div>
+    </aside>
+
+    <!-- Main Dynamic Content Workspace -->
+    <main class="main-workspace">
+      
+      <!-- A. DASHBOARD VIEW PANEL -->
+      <section id="dashboardView" class="view-panel active">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="fw-bold mb-0">Core Dashboard</h2>
+          <span class="text-muted small fw-semibold text-uppercase" id="dashboardTimestamp">Live Status</span>
+        </div>
+        
+        <!-- Summary Cards Grid -->
+        <div class="row g-4 mb-5">
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="stat-info">
+                <span class="stat-label">Today's Sales</span>
+                <span class="stat-value" id="widgetTodaySales">0</span>
+              </div>
+              <div class="stat-icon sales"><i class="fa-solid fa-basket-shopping"></i></div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="stat-info">
+                <span class="stat-label">Today's Revenue</span>
+                <span class="stat-value" id="widgetTodayRevenue">₹0.00</span>
+              </div>
+              <div class="stat-icon revenue"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="stat-info">
+                <span class="stat-label">Total Stock</span>
+                <span class="stat-value" id="widgetTotalProducts">0</span>
+              </div>
+              <div class="stat-icon products"><i class="fa-solid fa-boxes-packing"></i></div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="stat-info">
+                <span class="stat-label">Low Stock Alerts</span>
+                <span class="stat-value" id="widgetLowStockCount">0</span>
+              </div>
+              <div class="stat-icon alerts"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <!-- Recent Transactions -->
+          <div class="col-lg-8">
+            <div class="luxury-card h-100">
+              <h5 class="fw-bold mb-4"><i class="fa-solid fa-clock-rotate-left me-2 text-gold"></i>Recent Transactions</h5>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle" id="dashboardTransactionsTable">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Invoice No</th>
+                      <th>Date</th>
+                      <th>Customer Phone</th>
+                      <th>Total</th>
+                      <th>Payment</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colspan="6" class="text-center py-4 text-muted">No transactions registered today</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Low Stock Alert Panel -->
+          <div class="col-lg-4">
+            <div class="luxury-card h-100">
+              <h5 class="fw-bold mb-4 text-danger"><i class="fa-solid fa-circle-exclamation me-2"></i>Critical Low Stock</h5>
+              <div id="lowStockDashboardList" class="list-group list-group-flush overflow-auto" style="max-height: 300px;">
+                <div class="text-center py-4 text-muted small">No items below critical threshold</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- B. BILLING POS PANEL -->
+      <section id="billingView" class="view-panel">
+        <h2 class="fw-bold mb-4">Point of Sale Terminal</h2>
+        
+        <div class="pos-container">
+          
+          <!-- Left side: POS search and current cart -->
+          <div>
+            <div class="luxury-card mb-4">
+              <h6 class="text-uppercase small text-muted fw-bold mb-3">Item Quick Add</h6>
+              
+              <!-- Search Bar & Barcode input -->
+              <div class="pos-search-result-container">
+                <div class="input-group mb-0">
+                  <span class="input-group-text bg-light border-0"><i class="fa-solid fa-barcode"></i></span>
+                  <input type="text" class="form-control bg-light border-0 py-2.5" id="posSearchInput" placeholder="Scan Barcode or Search Product by Name/SKU Code..." autocomplete="off">
+                  <button class="btn btn-outline-secondary border-0 bg-light text-muted" type="button" id="btnClearPosSearch"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <!-- Dynamic Results Dropdown -->
+                <div id="posSearchResults" class="pos-search-results" style="display: none;"></div>
+              </div>
+            </div>
+
+            <!-- Cart Table -->
+            <div class="luxury-card">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0">Shopping Cart</h5>
+                <button class="btn btn-sm btn-outline-danger" id="btnClearCart"><i class="fa-solid fa-trash-can me-1"></i> Clear Cart</button>
+              </div>
+              
+              <div class="table-responsive" style="min-height: 250px;">
+                <table class="table align-middle" id="posCartTable">
+                  <thead class="table-dark">
+                    <tr>
+                      <th>Product</th>
+                      <th>SKU</th>
+                      <th>Size/Color</th>
+                      <th>Price</th>
+                      <th style="width: 130px;">Qty</th>
+                      <th>GST (12%)</th>
+                      <th>Total</th>
+                      <th style="width: 50px;"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colspan="8" class="text-center py-5 text-muted">Cart is empty. Scan or search items to populate.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right side: Customer link & Checkout options -->
+          <div class="pos-cart-panel">
+            <h5 class="fw-bold mb-4"><i class="fa-solid fa-receipt me-2 text-gold"></i>Checkout Hub</h5>
+            
+            <!-- Link Customer Section -->
+            <div class="mb-4">
+              <label for="posCustomerPhone" class="form-label small text-muted text-uppercase fw-bold">Customer Association</label>
+              <div class="input-group mb-2">
+                <span class="input-group-text bg-light border-0"><i class="fa-solid fa-phone"></i></span>
+                <input type="text" class="form-control bg-light border-0" id="posCustomerPhone" placeholder="Enter Mobile Number">
+                <button class="btn btn-dark" type="button" id="btnLookupCustomer"><i class="fa-solid fa-search"></i></button>
+              </div>
+              <div id="posCustomerDetails" class="alert alert-secondary p-2 small mb-0" style="display: none;">
+                <span id="posCustomerNameDisplay">Walk-in Customer</span> 
+                (<span id="posCustomerLoyaltyDisplay">0</span> Points)
+              </div>
+            </div>
+
+            <!-- Discounts adjustments -->
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <label for="posDiscountType" class="form-label small text-muted text-uppercase fw-bold">Discount Type</label>
+                <select class="form-select bg-light border-0" id="posDiscountType">
+                  <option value="none">No Discount</option>
+                  <option value="percentage">Percentage (%)</option>
+                  <option value="amount">Flat Amount (₹)</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="posDiscountValue" class="form-label small text-muted text-uppercase fw-bold">Discount Value</label>
+                <input type="number" class="form-control bg-light border-0" id="posDiscountValue" value="0" min="0" disabled>
+              </div>
+            </div>
+
+            <!-- Payment mode selection -->
+            <div class="mb-4">
+              <label class="form-label small text-muted text-uppercase fw-bold d-block">Payment Method</label>
+              <div class="btn-group w-100" role="group">
+                <input type="radio" class="btn-check" name="paymentMode" id="payCash" value="cash" checked>
+                <label class="btn btn-outline-dark py-2.5" for="payCash"><i class="fa-solid fa-wallet me-2"></i>Cash</label>
+
+                <input type="radio" class="btn-check" name="paymentMode" id="payUpi" value="upi">
+                <label class="btn btn-outline-dark py-2.5" for="payUpi"><i class="fa-solid fa-qrcode me-2"></i>UPI</label>
+
+                <input type="radio" class="btn-check" name="paymentMode" id="payCard" value="card">
+                <label class="btn btn-outline-dark py-2.5" for="payCard"><i class="fa-solid fa-credit-card me-2"></i>Card</label>
+              </div>
+            </div>
+
+            <!-- Summary Calculations -->
+            <div class="pos-billing-summary mb-4">
+              <div class="summary-row">
+                <span>Items Subtotal:</span>
+                <span id="posSubtotal">₹0.00</span>
+              </div>
+              <div class="summary-row text-muted">
+                <span>Included GST (12%):</span>
+                <span id="posGstTotal">₹0.00</span>
+              </div>
+              <div class="summary-row text-danger">
+                <span>Discounts:</span>
+                <span id="posDiscountAmount">-₹0.00</span>
+              </div>
+              <div class="summary-row total">
+                <span>Total Due:</span>
+                <span id="posGrandTotal">₹0.00</span>
+              </div>
+            </div>
+
+            <!-- Action Checkout button -->
+            <button class="btn btn-gold w-100 py-3 text-uppercase fw-bold fs-5 mt-auto" id="btnCheckoutSubmit">
+              <i class="fa-solid fa-lock-open me-2"></i>Complete & Print Invoice
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- C. PRODUCTS VIEW PANEL -->
+      <section id="productsView" class="view-panel">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="fw-bold mb-0">Product Directory</h2>
+          <div class="d-flex gap-2">
+            <button class="btn btn-gold-outline" id="btnManageCategories"><i class="fa-solid fa-tags me-1"></i> Categories</button>
+            <button class="btn btn-gold-outline" id="btnManageBrands"><i class="fa-solid fa-trademark me-1"></i> Brands</button>
+            <button class="btn btn-gold" id="btnAddNewProductModal"><i class="fa-solid fa-plus me-1"></i> Add Product</button>
+          </div>
+        </div>
+
+        <div class="luxury-card mb-4">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <div class="input-group">
+                <span class="input-group-text bg-light border-0"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" class="form-control bg-light border-0" id="productSearchQuery" placeholder="Search by name or barcode code...">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <select class="form-select bg-light border-0" id="productFilterCategory">
+                <option value="">All Categories</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <select class="form-select bg-light border-0" id="productFilterBrand">
+                <option value="">All Brands</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <select class="form-select bg-light border-0" id="productFilterStock">
+                <option value="all">All Inventory</option>
+                <option value="low">Low Stock Alert</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-dark w-100" id="btnProductFilterSearch">Apply Filters</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="luxury-card">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle table-luxury" id="productsTable">
+              <thead>
+                <tr>
+                  <th>Barcode / SKU</th>
+                  <th>Product Title</th>
+                  <th>Color Theme</th>
+                  <th>Size</th>
+                  <th>Available Stock</th>
+                  <th>Price (₹)</th>
+                  <th style="width: 120px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="7" class="text-center py-5 text-muted">No products loaded</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- D. INVENTORY VIEW PANEL -->
+      <section id="inventoryView" class="view-panel">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="fw-bold mb-0">Inventory Stock & Audits</h2>
+          <button class="btn btn-gold" id="btnStockAdjustmentModal"><i class="fa-solid fa-right-left me-1"></i> Stock In / Out Adjustment</button>
+        </div>
+
+        <div class="row g-4 mb-4">
+          <div class="col-md-6">
+            <div class="luxury-card">
+              <h5 class="fw-bold mb-3"><i class="fa-solid fa-boxes-packing text-gold me-2"></i>Stock Statistics</h5>
+              <div class="row">
+                <div class="col-6 mb-3 text-center border-end">
+                  <div class="small text-muted text-uppercase fw-semibold mb-1">Total Valuation (Retail)</div>
+                  <h4 class="fw-bold text-dark" id="statInventoryValuationRetail">₹0.00</h4>
+                </div>
+                <div class="col-6 text-center">
+                  <div class="small text-muted text-uppercase fw-semibold mb-1">Total Valuation (Wholesale)</div>
+                  <h4 class="fw-bold text-dark" id="statInventoryValuationCost">₹0.00</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="luxury-card">
+              <h5 class="fw-bold mb-3"><i class="fa-solid fa-triangle-exclamation text-danger me-2"></i>Stock Level Health</h5>
+              <div class="row">
+                <div class="col-6 mb-3 text-center border-end">
+                  <div class="small text-muted text-uppercase fw-semibold mb-1">Critical Stock Alerts</div>
+                  <h4 class="fw-bold text-danger" id="statInventoryLowStockCount">0 Items</h4>
+                </div>
+                <div class="col-6 text-center">
+                  <div class="small text-muted text-uppercase fw-semibold mb-1">Stock Turnover Rate</div>
+                  <h4 class="fw-bold text-success">Optimal</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="luxury-card">
+          <h5 class="fw-bold mb-4">Stock Ledger Logs</h5>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle" id="inventoryLogsTable">
+              <thead class="table-dark">
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Product</th>
+                  <th>SKU Code</th>
+                  <th>Action Type</th>
+                  <th>Quantity</th>
+                  <th>Notes / Reason</th>
+                  <th>Logged By</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="7" class="text-center py-5 text-muted">No stock movements found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- E. CUSTOMERS VIEW PANEL -->
+      <section id="customersView" class="view-panel">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="fw-bold mb-0">Customer Management</h2>
+          <button class="btn btn-gold" id="btnAddNewCustomerModal"><i class="fa-solid fa-user-plus me-1"></i> Add Customer</button>
+        </div>
+
+        <div class="luxury-card mb-4">
+          <div class="row g-3 align-items-center">
+            <div class="col-md-8">
+              <div class="input-group">
+                <span class="input-group-text bg-light border-0"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" class="form-control bg-light border-0" id="customerSearchQuery" placeholder="Search customers by name or 10-digit mobile number...">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <button class="btn btn-dark w-100" id="btnCustomerFilterSearch">Search Customer Directory</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="luxury-card">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle table-luxury" id="customersTable">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Mobile Number</th>
+                  <th>Loyalty points Balance</th>
+                  <th>Transaction History</th>
+                  <th style="width: 150px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="5" class="text-center py-5 text-muted">No customers recorded</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- F. REPORTS VIEW PANEL -->
+      <section id="reportsView" class="view-panel">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="fw-bold mb-0">Sales Analytics Reports</h2>
+          <div class="d-flex gap-2">
+            <button class="btn btn-gold-outline" id="btnExportCSV"><i class="fa-solid fa-file-csv me-1"></i> Export to Excel</button>
+            <button class="btn btn-gold" id="btnPrintReport"><i class="fa-solid fa-print me-1"></i> Print PDF Summary</button>
+          </div>
+        </div>
+
+        <!-- Filters card -->
+        <div class="luxury-card mb-4">
+          <div class="row g-3 align-items-end">
+            <div class="col-md-4">
+              <label for="reportStartDate" class="form-label small text-muted text-uppercase fw-bold">Start Date</label>
+              <input type="date" class="form-control bg-light border-0" id="reportStartDate">
+            </div>
+            <div class="col-md-4">
+              <label for="reportEndDate" class="form-label small text-muted text-uppercase fw-bold">End Date</label>
+              <input type="date" class="form-control bg-light border-0" id="reportEndDate">
+            </div>
+            <div class="col-md-4">
+              <button class="btn btn-dark w-100" id="btnApplyReportFilter">Generate Custom Report</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overview stats -->
+        <div class="row g-4 mb-5">
+          <div class="col-md-4">
+            <div class="luxury-card text-center">
+              <span class="small text-muted text-uppercase fw-bold mb-2 d-block">Period Total Revenue</span>
+              <h3 class="fw-bold text-dark" id="reportTotalRevenue">₹0.00</h3>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="luxury-card text-center">
+              <span class="small text-muted text-uppercase fw-bold mb-2 d-block">Transaction Volume</span>
+              <h3 class="fw-bold text-dark" id="reportTotalTransactions">0</h3>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="luxury-card text-center">
+              <span class="small text-muted text-uppercase fw-bold mb-2 d-block">Average Transaction Basket</span>
+              <h3 class="fw-bold text-dark" id="reportAverageBasket">₹0.00</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+          <!-- Sales Chart representation -->
+          <div class="col-md-8">
+            <div class="luxury-card">
+              <h5 class="fw-bold mb-4">Transaction Payment Breakdown</h5>
+              <div style="height: 300px; position: relative;">
+                <canvas id="paymentChartCanvas"></canvas>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Category list rankings -->
+          <div class="col-md-4">
+            <div class="luxury-card h-100">
+              <h5 class="fw-bold mb-4">Product-wise Sales Rank</h5>
+              <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                <table class="table table-sm align-middle" id="reportProductRankingTable">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Qty</th>
+                      <th>Revenue</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colspan="3" class="text-center py-4 text-muted small">No metrics generated</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="luxury-card" id="salesReportPrintContainer">
+          <h5 class="fw-bold mb-4">Detailed Audit Log</h5>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle" id="reportsSalesTable">
+              <thead class="table-dark">
+                <tr>
+                  <th>Invoice No</th>
+                  <th>Date</th>
+                  <th>Customer Phone</th>
+                  <th>Subtotal</th>
+                  <th>Discounts</th>
+                  <th>Grand Total</th>
+                  <th>Payment</th>
+                  <th>Cashier</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="8" class="text-center py-5 text-muted">Run filter queries to fetch data</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+
+
+    </main>
+  </div>
+
+  <!-- ==========================================
+       3. MODAL FORMS & DIALOG BOX MATRICES
+       ========================================== -->
+
+  <!-- Modal: Product Edit/Create -->
+  <div class="modal fade" id="productFormModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content border-0" style="border-radius: var(--border-radius-md);">
+        <div class="modal-header bg-dark text-white border-0 py-3">
+          <h5 class="modal-title fw-bold" id="productModalTitle">Add New Product</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="productDetailsForm">
+          <input type="hidden" id="productModalId">
+          <input type="hidden" id="prodCategory" value="">
+          <input type="hidden" id="prodBrand" value="">
+          <input type="hidden" id="prodCost" value="0">
+          <input type="hidden" id="prodThreshold" value="5">
+          <div class="modal-body p-4">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="prodCode" class="form-label small text-muted text-uppercase fw-bold">Barcode / SKU Code</label>
+                <input type="text" class="form-control bg-light border-0" id="prodCode" required placeholder="e.g. BAR1001">
+              </div>
+              <div class="col-md-6">
+                <label for="prodName" class="form-label small text-muted text-uppercase fw-bold">Product Title</label>
+                <input type="text" class="form-control bg-light border-0" id="prodName" required placeholder="e.g. Slim Denim Shorts">
+              </div>
+              <div class="col-md-6">
+                <label for="prodColor" class="form-label small text-muted text-uppercase fw-bold">Color Theme</label>
+                <input type="text" class="form-control bg-light border-0" id="prodColor" required placeholder="e.g. Dark Navy, Cream White">
+              </div>
+              <div class="col-md-6">
+                <label for="prodSize" class="form-label small text-muted text-uppercase fw-bold">Size Dimension</label>
+                <input type="text" class="form-control bg-light border-0" id="prodSize" required placeholder="e.g. S, M, L, XL, 32, 34">
+              </div>
+              <div class="col-md-6">
+                <label for="prodStock" class="form-label small text-muted text-uppercase fw-bold">Available Stock Unit</label>
+                <input type="number" class="form-control bg-light border-0" id="prodStock" min="0" value="0" required>
+              </div>
+              <div class="col-md-6">
+                <label for="prodPrice" class="form-label small text-muted text-uppercase fw-bold">Retail Selling Price (₹)</label>
+                <input type="number" step="0.01" min="0" class="form-control bg-light border-0" id="prodPrice" required placeholder="0.00">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer border-0 p-4 pt-0">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-gold" id="btnProductSaveSubmit">Save Product Profile</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Category Management -->
+  <div class="modal fade" id="categoryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+      <div class="modal-content border-0 shadow" style="border-radius: var(--border-radius-md);">
+        <div class="modal-header bg-dark text-white border-0">
+          <h5 class="modal-title fw-bold">Category Line Manager</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="addCategoryForm" class="mb-4">
+            <label class="form-label small text-muted text-uppercase fw-bold">Add Category</label>
+            <div class="d-flex gap-2">
+              <input type="text" class="form-control bg-light border-0" id="catName" required placeholder="Category Name (e.g. Accessories)">
+              <button type="submit" class="btn btn-gold"><i class="fa-solid fa-plus"></i></button>
+            </div>
+          </form>
+          <label class="form-label small text-muted text-uppercase fw-bold mb-2">Current Category Inventory</label>
+          <div class="list-group list-group-flush border" id="modalCategoryList" style="max-height: 250px; overflow-y: auto;">
+            <!-- Categories rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Brand Management -->
+  <div class="modal fade" id="brandModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+      <div class="modal-content border-0 shadow" style="border-radius: var(--border-radius-md);">
+        <div class="modal-header bg-dark text-white border-0">
+          <h5 class="modal-title fw-bold">Trademark Brand Manager</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="addBrandForm" class="mb-4">
+            <label class="form-label small text-muted text-uppercase fw-bold">Add Brand</label>
+            <div class="d-flex gap-2">
+              <input type="text" class="form-control bg-light border-0" id="brandName" required placeholder="Brand Name (e.g. Nike)">
+              <button type="submit" class="btn btn-gold"><i class="fa-solid fa-plus"></i></button>
+            </div>
+          </form>
+          <label class="form-label small text-muted text-uppercase fw-bold mb-2">Registered Trademark Brands</label>
+          <div class="list-group list-group-flush border" id="modalBrandList" style="max-height: 250px; overflow-y: auto;">
+            <!-- Brands rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Stock Adjustment -->
+  <div class="modal fade" id="stockAdjustmentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+      <div class="modal-content border-0 shadow" style="border-radius: var(--border-radius-md);">
+        <div class="modal-header bg-dark text-white border-0">
+          <h5 class="modal-title fw-bold">Stock In / Stock Out Ledger Entry</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="stockAdjustmentForm">
+          <div class="modal-body p-4">
+            <div class="mb-3">
+              <label for="adjProduct" class="form-label small text-muted text-uppercase fw-bold">Select Clothing Product</label>
+              <select class="form-select bg-light border-0" id="adjProduct" required>
+                <!-- Products loaded by API -->
+              </select>
+            </div>
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label for="adjType" class="form-label small text-muted text-uppercase fw-bold">Adjustment Type</label>
+                <select class="form-select bg-light border-0" id="adjType" required>
+                  <option value="in">Stock In (Supplier Shipment/Add)</option>
+                  <option value="out">Stock Out (Damaged/Deduct)</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="adjQty" class="form-label small text-muted text-uppercase fw-bold">Quantity Units</label>
+                <input type="number" class="form-control bg-light border-0" id="adjQty" required min="1" placeholder="Quantity">
+              </div>
+            </div>
+            <div class="mb-0">
+              <label for="adjReason" class="form-label small text-muted text-uppercase fw-bold">Reason Notes</label>
+              <input type="text" class="form-control bg-light border-0" id="adjReason" required placeholder="e.g. Supplier Shipment, Defective returns">
+            </div>
+          </div>
+          <div class="modal-footer border-0 p-4 pt-0">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-gold">Commit Stock Log</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Customer Profile & Purchase Histories -->
+  <div class="modal fade" id="customerHistoryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content border-0 shadow" style="border-radius: var(--border-radius-md);">
+        <div class="modal-header bg-dark text-white border-0">
+          <h5 class="modal-title fw-bold" id="customerHistoryTitle">Customer Sales History</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <div class="row g-4 mb-4">
+            <div class="col-md-6">
+              <h6 class="small text-muted text-uppercase fw-semibold">Customer Information</h6>
+              <div class="fs-5 fw-bold" id="customerHistoryName">Customer Name</div>
+              <div class="text-muted" id="customerHistoryPhone">0000000000</div>
+            </div>
+            <div class="col-md-6 text-md-end">
+              <h6 class="small text-muted text-uppercase fw-semibold">Loyalty Program Balance</h6>
+              <div class="fs-4 fw-bold text-success" id="customerHistoryPoints">0 Points</div>
+            </div>
+          </div>
+          <h6 class="fw-bold mb-3">Order History Directory</h6>
+          <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+            <table class="table align-middle" id="customerHistoryTable">
+              <thead>
+                <tr>
+                  <th>Invoice No</th>
+                  <th>Date</th>
+                  <th>Grand Total</th>
+                  <th>Payment</th>
+                  <th>Cashier</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="6" class="text-center py-4 text-muted">No orders found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add New Customer Dialog -->
+  <div class="modal fade" id="customerCreateModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+      <div class="modal-content border-0 shadow" style="border-radius: var(--border-radius-md);">
+        <div class="modal-header bg-dark text-white border-0">
+          <h5 class="modal-title fw-bold">Register New Customer</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="customerCreateForm">
+          <div class="modal-body p-4">
+            <div class="mb-3">
+              <label for="custName" class="form-label small text-muted text-uppercase fw-bold">Customer Full Name</label>
+              <input type="text" class="form-control bg-light border-0" id="custName" required placeholder="Enter Customer Name">
+            </div>
+            <div class="mb-0">
+              <label for="custPhone" class="form-label small text-muted text-uppercase fw-bold">Mobile Phone (10 digits)</label>
+              <input type="tel" class="form-control bg-light border-0" id="custPhone" required pattern="[0-9]{10}" placeholder="Enter 10-digit Phone Number">
+            </div>
+          </div>
+          <div class="modal-footer border-0 p-4 pt-0">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-gold">Save Customer Details</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Thermal Receipt Print Preview modal -->
+  <div class="modal fade" id="invoicePrintModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 90mm;">
+      <div class="modal-content border-0 shadow-lg" style="border-radius: var(--border-radius-md);">
+        <div class="modal-header bg-light border-0">
+          <h6 class="modal-title fw-bold text-muted text-uppercase">Print Bill Receipt</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-1 bg-white" style="overflow-x: hidden;">
+          <!-- Thermal Printable invoice contents -->
+          <div id="invoicePrintModalContent" class="invoice-print-body">
+            <!-- Populated dynamically via printReceipt() JS function -->
+          </div>
+        </div>
+        <div class="modal-footer border-0 bg-light d-flex justify-content-between p-3">
+          <button type="button" class="btn btn-sm btn-outline-danger" id="btnDownloadInvoicePDF"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+          <button type="button" class="btn btn-sm btn-dark" id="btnExecuteInvoicePrint"><i class="fa-solid fa-print"></i> Thermal Print</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       4. THIRD-PARTY CLIENT SCRIPTS (CDNs)
+       ========================================== -->
+  
+  <!-- Bootstrap 5 JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- SweetAlert2 for user action feedback alerts -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <!-- SheetJS for Exporting Excel -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  
+  <!-- html2pdf.js for invoice pdf exports -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- Custom SPA app logical script controller -->
+  <script src="/js/app.js"></script>
+
+</body>
+</html>
