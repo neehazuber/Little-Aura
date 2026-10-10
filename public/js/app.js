@@ -666,8 +666,26 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('posDiscountValue').value = '0';
     document.getElementById('posDiscountValue').disabled = true;
 
+    // Reset UPI QR box & payment to Cash
+    document.getElementById('payCash').checked = true;
+    document.getElementById('upiQrBox').style.display = 'none';
+
     renderPOSCart();
   };
+
+  // Show/hide UPI QR code when payment method changes
+  document.querySelectorAll('input[name="paymentMode"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      const upiBox = document.getElementById('upiQrBox');
+      if (e.target.value === 'upi') {
+        upiBox.style.display = 'block';
+        upiBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } else {
+        upiBox.style.display = 'none';
+      }
+    });
+  });
+
 
   // Discount configuration changes
   document.getElementById('posDiscountType').addEventListener('change', (e) => {

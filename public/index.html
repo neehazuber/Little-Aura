@@ -279,6 +279,31 @@
               </div>
             </div>
 
+            <!-- UPI QR Code Box (shows when UPI is selected) -->
+            <div id="upiQrBox" style="display:none;" class="mb-4">
+              <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 2px solid #0ea5e9; border-radius: 16px; padding: 16px; text-align: center;">
+                <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #0369a1; letter-spacing: 1px; margin-bottom: 10px;">
+                  <i class="fa-solid fa-qrcode me-1"></i> Scan & Pay via UPI
+                </div>
+                <div style="background: white; border-radius: 12px; padding: 10px; display: inline-block; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 10px;">
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=6383834943@ptyes%26pn=Little%20Aura%26cu=INR" 
+                       alt="UPI QR Code" 
+                       style="width: 180px; height: 180px; display: block;"
+                       onerror="this.style.display='none'; document.getElementById('upiQrFallback').style.display='block';">
+                  <div id="upiQrFallback" style="display:none; width:180px; height:180px; display:flex; align-items:center; justify-content:center; color:#666; font-size:12px;">QR loading...</div>
+                </div>
+                <div style="font-size: 13px; font-weight: 700; color: #0c4a6e; margin-bottom: 4px;">
+                  <i class="fa-solid fa-user me-1"></i> Abubakker Siddiq S
+                </div>
+                <div style="font-size: 12px; color: #0369a1; font-weight: 600; background: white; border-radius: 8px; padding: 4px 12px; display: inline-block; margin-bottom: 4px;">
+                  UPI: 6383834943@ptyes
+                </div>
+                <div style="font-size: 11px; color: #64748b; margin-top: 4px;">
+                  <i class="fa-solid fa-building-columns me-1"></i> Bank of Baroda
+                </div>
+              </div>
+            </div>
+
             <!-- Summary Calculations -->
             <div class="pos-billing-summary mb-4">
               <div class="summary-row">
