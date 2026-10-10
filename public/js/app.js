@@ -562,7 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('prodCategory').value = prod.category ? prod.category._id : '';
         document.getElementById('prodBrand').value = prod.brand ? prod.brand._id : '';
         document.getElementById('prodSize').value = prod.size;
-        document.getElementById('prodColor').value = prod.color;
+
         document.getElementById('prodPrice').value = prod.price;
         document.getElementById('prodCost').value = prod.costPrice;
         document.getElementById('prodStock').value = prod.stock;
@@ -586,7 +586,7 @@ document.addEventListener('DOMContentLoaded', () => {
       category: document.getElementById('prodCategory').value,
       brand: document.getElementById('prodBrand').value,
       size: document.getElementById('prodSize').value.trim(),
-      color: document.getElementById('prodColor').value.trim(),
+      color: '',
       price: parseFloat(document.getElementById('prodPrice').value),
       costPrice: parseFloat(document.getElementById('prodCost').value),
       stock: parseInt(document.getElementById('prodStock').value) || 0,
