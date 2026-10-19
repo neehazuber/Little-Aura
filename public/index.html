@@ -247,9 +247,15 @@
                 <input type="text" class="form-control bg-light border-0" id="posCustomerPhone" placeholder="Enter Mobile Number">
                 <button class="btn btn-dark" type="button" id="btnLookupCustomer"><i class="fa-solid fa-search"></i></button>
               </div>
-              <div id="posCustomerDetails" class="alert alert-secondary p-2 small mb-0" style="display: none;">
-                <span id="posCustomerNameDisplay">Walk-in Customer</span> 
-                (<span id="posCustomerLoyaltyDisplay">0</span> Points)
+              <div id="posCustomerDetails" class="p-2 small mb-0" style="display: none; background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 1.5px solid #16a34a; border-radius: 10px;">
+                <div style="font-weight: 700; font-size: 14px; color: #15803d;">
+                  <i class="fa-solid fa-circle-check me-1"></i> 
+                  <span id="posCustomerNameDisplay">Customer</span>
+                </div>
+                <div style="color: #166534; font-size: 12px; margin-top: 2px;">
+                  <i class="fa-solid fa-star me-1" style="color: #ca8a04;"></i>
+                  <span id="posCustomerLoyaltyDisplay">0</span> Loyalty Points
+                </div>
               </div>
             </div>
 
@@ -294,8 +300,7 @@
                   <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=6383834943@ptyes%26pn=Little%20Aura%26cu=INR" 
                        alt="UPI QR Code" 
                        style="width: 180px; height: 180px; display: block;"
-                       onerror="this.style.display='none'; document.getElementById('upiQrFallback').style.display='block';">
-                  <div id="upiQrFallback" style="display:none; width:180px; height:180px; display:flex; align-items:center; justify-content:center; color:#666; font-size:12px;">QR loading...</div>
+                       onerror="this.style.display='none';">
                 </div>
                 <div style="font-size: 13px; font-weight: 700; color: #0c4a6e; margin-bottom: 4px;">
                   <i class="fa-solid fa-user me-1"></i> Abubakker Siddiq S
