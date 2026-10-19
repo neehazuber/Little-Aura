@@ -28,6 +28,7 @@ app.use('/api/customers', require('./routes/customers'));
 app.use('/api/billing', require('./routes/billing'));
 app.use('/api/inventory', require('./routes/inventory'));
 app.use('/api/reports', require('./routes/reports'));
+app.use('/api/admin', require('./routes/admin'));
 
 // Serve Static Assets in production
 app.use(express.static(path.join(__dirname, 'public')));
