@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Dark background -->
+  <rect width="512" height="512" fill="#1a1a1a" rx="0"/>
+  
+  <!-- Cream circle -->
+  <circle cx="256" cy="256" r="210" fill="#f5f0e8"/>
+  
+  <!-- LITTLE text -->
+  <text x="256" y="230" 
+        font-family="Arial Black, Arial, sans-serif" 
+        font-weight="900" 
+        font-size="88" 
+        fill="#8B4513" 
+        text-anchor="middle" 
+        letter-spacing="-2">LITTLE</text>
+  
+  <!-- AURA text -->
+  <text x="256" y="328" 
+        font-family="Arial Black, Arial, sans-serif" 
+        font-weight="900" 
+        font-size="88" 
+        fill="#8B4513" 
+        text-anchor="middle" 
+        letter-spacing="-2">AURA</text>
+  
+  <!-- CURATED APPAREL text -->
+  <text x="256" y="370" 
+        font-family="Arial, sans-serif" 
+        font-weight="400" 
+        font-size="26" 
+        fill="#8B4513" 
+        text-anchor="middle" 
+        letter-spacing="3">CURATED APPAREL</text>
+</svg>
