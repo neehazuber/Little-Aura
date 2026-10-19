@@ -1,0 +1,17 @@
+{
+  "name": "Little Aura",
+  "short_name": "Little Aura",
+  "description": "Little Aura - Curated Apparel POS & Billing System",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#1a1a1a",
+  "icons": [
+    {
+      "src": "/icon.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
