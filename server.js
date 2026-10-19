@@ -14,9 +14,6 @@ const Customer = require('./models/Customer');
 
 const app = express();
 
-// Connect Database
-connectDB();
-
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -58,9 +55,15 @@ const seedDatabase = async () => {
 
 // Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, async () => {
-  console.log(`Server running on port ${PORT}`);
-  if (require('mongoose').connection.readyState === 1) {
-    await seedDatabase();
-  }
-});
+
+const startServer = async () => {
+  await connectDB(); // wait for DB to be ready first
+  await seedDatabase(); // then seed admin user
+
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+};
+
+startServer();
+
